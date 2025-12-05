@@ -4,6 +4,9 @@ import { FaArrowRight } from "react-icons/fa";
 
 const ProjectsPage = () => {
     const [projects, setProjects] = useState([]);
+    const [projectFilter, setProjectFilter]=useState("All");
+
+    const filterProjectStatus= projects.filter((p)=>projectFilter==="All"?true:p.status===projectFilter)
 
     const fetchProjects = async () => {
         try {
@@ -26,7 +29,7 @@ const ProjectsPage = () => {
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h3 className="fw-bold m-0">All Projects</h3>
 
-                <Link to="/" className="btn btn-secondary">
+                <Link to="/dashboard" className="btn btn-secondary">
                     ← Back to Dashboard
                 </Link>
             </div>
@@ -38,38 +41,38 @@ const ProjectsPage = () => {
                 <div className="card-body d-flex flex-wrap align-items-center gap-3">
 
                     {/* Menu Buttons */}
-                    <div className="d-flex gap-2">
+                    {/* <div className="d-flex gap-2">
                         <button className="btn btn-outline-primary active">Tasks</button>
                         <button className="btn btn-outline-primary">Overview</button>
                         <button className="btn btn-outline-primary">Members</button>
                         <button className="btn btn-outline-primary">Files</button>
-                    </div>
+                    </div> */}
 
                     {/* Divider */}
                     <div className="vr"></div>
 
                     {/* Owner Filter */}
-                    <select className="form-select w-auto">
-                        <option>Owner: All</option>
-                        <option>Rahul</option>
-                        <option>Jyoti</option>
-                        <option>Pooja</option>
+                    <select className="form-select w-auto" value={projectFilter} onChange={(e)=>setProjectFilter(e.target.value)}>
+                        <option value="All">Filter: All</option>
+                        <option value="To Do">To Do</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
                     </select>
 
                     {/* Tag Filter */}
-                    <select className="form-select w-auto">
+                    {/* <select className="form-select w-auto">
                         <option>Tag: All</option>
                         <option>Urgent</option>
                         <option>Design</option>
                         <option>Client</option>
-                    </select>
+                    </select> */}
 
                     {/* Sort By */}
-                    <select className="form-select w-auto">
+                    {/* <select className="form-select w-auto">
                         <option>Sort: Due Date</option>
                         <option>Priority</option>
                         <option>Status</option>
-                    </select>
+                    </select> */}
 
                     {/* Push Add Button Right */}
                     <div className="ms-auto"></div>
@@ -94,7 +97,7 @@ const ProjectsPage = () => {
                         </thead>
 
                         <tbody>
-                            {projects.map((project) => (
+                            {filterProjectStatus.map((project) => (
                                 <tr key={project._id}>
                                     <td className="fw-semibold">{project.name}</td>
 

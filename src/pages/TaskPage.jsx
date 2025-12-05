@@ -5,6 +5,9 @@ import { FaArrowRight } from "react-icons/fa";
 
 const TaskPage = () => {
     const [tasks, setTasks] = useState([]);
+    const [taskFilter, setTaskFilter]=useState("All");
+
+    const filterTaskStatus= tasks.filter((t)=>taskFilter==="All"?true:t.status===taskFilter);
 
     const fetchTasks = async () => {
         try {
@@ -26,7 +29,7 @@ const TaskPage = () => {
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h3 className="fw-bold m-0">Project: Website Redesign</h3>
 
-                <Link to="/" className="btn btn-outline-secondary">
+                <Link to="/dashboard" className="btn btn-outline-secondary">
                     ← Back to Dashboard
                 </Link>
             </div>
@@ -48,14 +51,14 @@ const TaskPage = () => {
                     <div className="vr"></div>
 
                     {/* FILTERS */}
-                    <select className="form-select w-auto">
-                        <option>Owner: All</option>
-                        <option>Rahul</option>
-                        <option>Jyoti</option>
-                        <option>Pooja</option>
+                    <select className="form-select w-auto" value={taskFilter} onChange={(e)=>setTaskFilter(e.target.value)}>
+                        <option value="All">Filter: All</option>
+                        <option value="To Do">To Do</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
                     </select>
 
-                    <select className="form-select w-auto">
+                    {/* <select className="form-select w-auto">
                         <option>Tag: All</option>
                         <option>Urgent</option>
                         <option>Design</option>
@@ -66,7 +69,7 @@ const TaskPage = () => {
                         <option>Sort: Due Date</option>
                         <option>Priority</option>
                         <option>Status</option>
-                    </select>
+                    </select> */}
 
                     {/* PUSH BUTTON TO RIGHT */}
                     <div className="ms-auto"></div>
@@ -96,7 +99,7 @@ const TaskPage = () => {
                         </thead>
 
                         <tbody>
-                            {tasks.map((task) => (
+                            {filterTaskStatus.map((task) => (
                                 <tr key={task._id} className="table-row-hover">
 
                                     {/* Task Name */}
