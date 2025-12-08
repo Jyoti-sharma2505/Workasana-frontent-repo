@@ -9,6 +9,8 @@ import ReportPage from './pages/ReportPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import ProjectsPage from './pages/ProjectsPage';
+import TeamDetails from './pages/TeamDetails';
+import SettingPage from './pages/SettingPage';
 
 function App() {
   return (
@@ -31,7 +33,9 @@ function App() {
                   <Route path="/projects" element={<ProjectsPage />} />
                   <Route path="/tasks" element={<TaskPage />} />
                   <Route path="/teams" element={<TeamPage />} />
+                  <Route path='/teams/:teamId' element={<TeamDetails/>}/>
                   <Route path="/reports" element={<ReportPage />} />
+                  <Route path='/settings' element={<SettingPage/>}/>
                 </Routes>
               </div>
             </div>

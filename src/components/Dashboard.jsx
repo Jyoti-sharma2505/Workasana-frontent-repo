@@ -3,6 +3,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import axios from "axios";
 import { CiSearch } from "react-icons/ci";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Dashboard = () => {
     const [projects, setProjects] = useState([]);
@@ -64,6 +66,7 @@ const Dashboard = () => {
             await axios.post("https://workasana-backend-repo.vercel.app/projects", body);
 
             fetchProjects();
+            toast.success("Project created successfully!");
 
             setName("");
             setDescription("");
@@ -91,6 +94,7 @@ const Dashboard = () => {
             await axios.post("https://workasana-backend-repo.vercel.app/tasks", payload);
 
             fetchTasks();
+            toast.success("Task created successfully!");
 
             setName("");
             setProjectId("");
@@ -150,6 +154,7 @@ const Dashboard = () => {
 
     return (
         <div>
+            <ToastContainer position="top-right" autoClose={2000} />
 
             {/* NAVBAR */}
             <nav className="navbar bg-body-tertiary px-3 shadow-sm">

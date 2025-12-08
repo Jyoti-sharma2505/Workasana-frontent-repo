@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const ProjectsPage = () => {
     const [projects, setProjects] = useState([]);
-    const [projectFilter, setProjectFilter]=useState("All");
+    const [projectFilter, setProjectFilter] = useState("All");
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
+    const [status, setStatus] = useState("")
 
-    const filterProjectStatus= projects.filter((p)=>projectFilter==="All"?true:p.status===projectFilter)
+    const filterProjectStatus = projects.filter((p) => projectFilter === "All" ? true : p.status === projectFilter)
 
     const fetchProjects = async () => {
         try {
@@ -17,6 +23,25 @@ const ProjectsPage = () => {
             console.log("Error fetching projects:", error);
         }
     };
+    const handleCreateProject = async () => {
+        try {
+            const body = {
+                name,
+                description,
+                status,
+            }
+            await axios.post("https://workasana-backend-repo.vercel.app/projects", body);
+            fetchProjects();
+            toast.success("Project added successfully....");
+            setName("");
+            setDescription("");
+            setStatus("To Do")
+            document.querySelector("#projectModal .btn-close").click()
+        } catch (error) {
+            console.log("Something went wrong..")
+        }
+
+    }
 
     useEffect(() => {
         fetchProjects();
@@ -24,6 +49,7 @@ const ProjectsPage = () => {
 
     return (
         <div className="container-fluid mt-4">
+            <ToastContainer position="top-right" autoClose={2000} />
 
             {/* ---- PAGE HEADER ---- */}
             <div className="d-flex justify-content-between align-items-center mb-4">
@@ -52,7 +78,7 @@ const ProjectsPage = () => {
                     <div className="vr"></div>
 
                     {/* Owner Filter */}
-                    <select className="form-select w-auto" value={projectFilter} onChange={(e)=>setProjectFilter(e.target.value)}>
+                    <select className="form-select w-auto" value={projectFilter} onChange={(e) => setProjectFilter(e.target.value)}>
                         <option value="All">Filter: All</option>
                         <option value="To Do">To Do</option>
                         <option value="In Progress">In Progress</option>
@@ -157,6 +183,8 @@ const ProjectsPage = () => {
                                         type="text"
                                         className="form-control"
                                         placeholder="Enter project name"
+                                        value={name}
+                                        onChange={(e)=>setName(e.target.value)}
                                     />
                                 </div>
 
@@ -167,20 +195,22 @@ const ProjectsPage = () => {
                                         className="form-control"
                                         rows="3"
                                         placeholder="Enter project description"
+                                        value={description}
+                                        onChange={(e)=>setDescription(e.target.value)}
                                     ></textarea>
                                 </div>
 
                                 {/* Status */}
                                 <div className="col-md-6">
                                     <label className="fw-semibold mb-1">Status</label>
-                                    <select className="form-select">
+                                    <select className="form-select" value={status} onChange={(e)=>setStatus(e.target.value)}>
                                         <option>To Do</option>
                                         <option>In Progress</option>
                                         <option>Completed</option>
                                     </select>
                                 </div>
 
-                                {/* Priority */}
+                                {/* Priority
                                 <div className="col-md-6">
                                     <label className="fw-semibold mb-1">Priority</label>
                                     <select className="form-select">
@@ -188,7 +218,7 @@ const ProjectsPage = () => {
                                         <option>Medium</option>
                                         <option>High</option>
                                     </select>
-                                </div>
+                                </div> */}
 
                             </form>
                         </div>
@@ -198,7 +228,7 @@ const ProjectsPage = () => {
                             <button className="btn btn-secondary" data-bs-dismiss="modal">
                                 Close
                             </button>
-                            <button className="btn btn-primary px-4">Create Project</button>
+                            <button className="btn btn-primary px-4" onClick={handleCreateProject}>Create Project</button>
                         </div>
 
                     </div>

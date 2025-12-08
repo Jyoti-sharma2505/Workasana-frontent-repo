@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const TeamPage = () => {
     const [teams, setTeams] = useState([]);
@@ -59,6 +61,7 @@ const TeamPage = () => {
 
             await axios.post("https://workasana-backend-repo.vercel.app/teams", body);
 
+
             // Reset fields
             setTeamName("");
             setTeamDesc("");
@@ -66,6 +69,9 @@ const TeamPage = () => {
 
             // Refresh team list
             fetchTeams();
+
+            ///Toster
+            toast.success("Team added successfully...")
 
             // Close modal
             document.getElementById("closeModalBtn").click();
@@ -77,6 +83,7 @@ const TeamPage = () => {
 
     return (
         <div className="container mt-4">
+             <ToastContainer position="top-right" autoClose={2000} />
 
             {/* Page Heading */}
             <div className="d-flex justify-content-between align-items-center mb-4">
