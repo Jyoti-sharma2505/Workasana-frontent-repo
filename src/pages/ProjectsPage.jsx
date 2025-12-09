@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,15 +10,16 @@ const ProjectsPage = () => {
     const [projectFilter, setProjectFilter] = useState("All");
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [status, setStatus] = useState("")
+    const [status, setStatus] = useState("");
+    const navigate = useNavigate()
 
-    const filterProjectStatus = projects.filter((p) => projectFilter === "All" ? true : p.status === projectFilter)
+    const filterProjectStatus = projects?.filter((p) => projectFilter === "All" ? true : p.status === projectFilter)
 
     const fetchProjects = async () => {
         try {
-            const response = await fetch("https://workasana-backend-repo.vercel.app/projects");
-            const data = await response.json();
-            setProjects(data);
+            const response = await axios.get("https://workasana-backend-repo.vercel.app/projects");
+            // const data = await response.json();
+            setProjects(response?.data);
         } catch (error) {
             console.log("Error fetching projects:", error);
         }
@@ -118,6 +119,7 @@ const ProjectsPage = () => {
                                 <th>Project Name</th>
                                 <th>Status</th>
                                 <th>Created At</th>
+                                <th>Action</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -150,7 +152,7 @@ const ProjectsPage = () => {
                                             : "No Date"}
                                     </td>
 
-                                    <td className="text-primary" style={{ cursor: "pointer" }}>
+                                    <td className="text-primary" style={{ cursor: "pointer" }} onClick={()=>navigate(`/projects/${project._id}`)} >
                                         <FaArrowRight size={18} />
                                     </td>
                                 </tr>
